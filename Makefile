@@ -1,2 +1,2 @@
 all:
-	python script.py
+	@ python script.py
