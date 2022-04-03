@@ -2,8 +2,21 @@ from bs4 import BeautifulSoup as bs
 import requests
 import sys
 
+def print_error(e) -> None:
+    print("ERROR!")
+    print(e, file=sys.stderr)
+
+def get_page(url: str):
+    try:
+        page = requests.get(url)
+    except Exception as e:
+        print_error(e)
+        exit(-1)
+    return page
+
 def run(url: str) -> list:
-    page = requests.get(url)
+    #page = requests.get(url)
+    page = get_page(url)
 
     soup = bs(page.text, "html.parser")
 
@@ -19,7 +32,7 @@ def run(url: str) -> list:
             market_cup = table_rows[i].find_all("td")[6].find('span').text
             data.append({'name': name, 'price': price, 'market_cup': market_cup})
         except Exception as e:
-            print(e, file=sys.stderr)
+            print_error(e)
             continue
         
     for i in range(len(data)):
